@@ -21,13 +21,14 @@
 class Task(object):
 
     def __init__(self, name):
-        self._id = 0
+        self._id = id(self)
         self._name = name
         self._value = None
         self._completed = False
 
     def complete(self):
-        _completed = True
+        self._completed = True
+        self._value = self._name.upper().count('CCN')
 
     @property
     def is_completed(self):
@@ -39,7 +40,7 @@ class Task(object):
 
     @property
     def id(self):
-        self._id
+        return self._id
 
     @property
     def value(self):
@@ -57,11 +58,19 @@ class TaskManager(object):
 
     def complete_tasks(self):
         if len(self._tasks) > 0:
-            if not all([task.is_completed for task in self._tasks]):
-                for task in self._tasks:
+            # if not all([task.is_completed for task in self._tasks]):
+            for task in self._tasks:
+                if not task.is_completed:
                     task.complete()
                     print('task {name} completed'.format(name=task.name))
 
     def remove_tasks(self):
         while len(self._tasks) > 0:
             self._tasks.pop()
+
+    def remove_task(self, id):
+        task = [t for t in self._tasks if t.id == id]
+        self._tasks.remove(task)
+
+
+
